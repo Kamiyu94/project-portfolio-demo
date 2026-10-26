@@ -1,4 +1,4 @@
-import {renderScenario,resetScenario} from './scenario.mjs?v=2';
+import {renderScenario,resetScenario} from './scenario.mjs?v=brief-1';
 import {renderDecisions,renderEmployee,resetDecisions} from './decisions.mjs?v=employee-1';
 import {projects,cases,TEAMS,DEMO_DATE} from './data.mjs';
 import {derive,filterCases,progress,reorder,sortRows,LIGHTS} from './model.mjs';

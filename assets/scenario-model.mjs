@@ -1,5 +1,5 @@
 import {TASKS,assess,DEFAULT_RULES,validateFollowup} from './decision-model.mjs';
-import {validateReport,submitReport,respondReport,progressReport,closeReport} from './report-model.mjs';
+import {respondReport,progressReport,closeReport} from './report-model.mjs';
 export const SCENARIO_TASK=TASKS[0];
 export function newScenario(){return {step:'overview',progressSaved:false,option:'split',update:{forecast:SCENARIO_TASK.baseline,remaining:12},report:null};}
 export function scenarioRisk(s){return assess(SCENARIO_TASK,s.update,DEFAULT_RULES,'2026-10-26T17:00');}
@@ -11,10 +11,12 @@ export function updateScenarioProgress(s,d){
 }
 export function reportScenario(s,d){
  if(s.step!=='exception')throw Error('請先更新進度並確認異常。');
- const input={...d,forecast:s.update.forecast,remaining:s.update.remaining};
- const error=validateReport(SCENARIO_TASK,input,'2026-10-26T12:00');if(error)throw Error(error);
- if(input.support==='不需支援')throw Error('此情境請選擇支援或加班需求。');
- return {...s,step:'report',progressSaved:true,option:input.support==='額外工時'?'extra':'split',report:submitReport(null,SCENARIO_TASK,input,'2026-10-26T12:00')};
+ const problem=d.problem?.trim(),supportDetail=d.supportDetail?.trim();
+ if(!problem||!supportDetail)throw Error('請填寫異常原因與需要的協助。');
+ if(problem.length>600||supportDetail.length>600)throw Error('每個欄位請保持在 600 字以內。');
+ // Preserve employee text. Do not infer support classification, hours or approval from prose.
+ const report={task:SCENARIO_TASK.id,reporter:SCENARIO_TASK.owner,problem,supportDetail,forecast:s.update.forecast,remaining:s.update.remaining,status:'pending',response:null,events:[{kind:'員工提出回報',at:'2026-10-26T12:00',actor:SCENARIO_TASK.owner,text:`原因：${problem}\n需要協助：${supportDetail}\n完成預估：${s.update.forecast}；剩餘 ${s.update.remaining} 人時`}]};
+ return {...s,step:'report',progressSaved:true,option:'split',report};
 }
 export function decideScenario(s,option,reason){
  if(s.step!=='report')throw Error('請先取得完整的員工異常與需求。');const chosen=SCENARIO_TASK.options.find(o=>o.id===option);if(!chosen||!reason?.trim())throw Error('請選擇方案並補上判斷理由。');

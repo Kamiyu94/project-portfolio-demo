@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check assets/app.mjs && node --check assets/model.mjs && node --check assets/data.mjs && node --check assets/decisions.mjs && node --check assets/decision-model.mjs"
+    "check": "node --check assets/app.mjs && node --check assets/model.mjs && node --check assets/data.mjs && node --check assets/decisions.mjs && node --check assets/decision-model.mjs && node --check assets/report-model.mjs"
   },
   "engines": {
     "node": ">=20"

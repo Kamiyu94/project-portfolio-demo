@@ -32,3 +32,7 @@ python3 -m http.server 4320 --bind 127.0.0.1
 ```
 
 GitHub Pages 使用 `main` 分支根目錄。`assets/data.mjs` 定義虛構資料，`assets/model.mjs` 定義到期、停滯、排序與呈報順序規則。
+
+## 閱讀與響應式排版
+
+主要文字與表單以 16px（1rem）為基準，輔助文字 14px，小標籤至少 12px。字級使用相對單位；較窄螢幕改用單欄，寬表格在自己的容器內捲動。
